@@ -6,6 +6,7 @@ class RefactoringTest < Test::Unit::TestCase
 
   MOVIE_REGULAR = Movie.new("Avengers", Movie::REGULAR)
   MOVIE_CHILDRENS = Movie.new("Cars", Movie::CHILDRENS)
+  MOVIE_NEW_RELEASE = Movie.new("Civil War", Movie::NEW_RELEASE)
 
   def setup
     @customer = Customer.new "Alessio"
@@ -38,6 +39,16 @@ class RefactoringTest < Test::Unit::TestCase
   def test_rental_children_eight_days
     @customer.add_rental Rental.new(MOVIE_CHILDRENS, 8)
     assert_equal @customer.statement, rented_statement("Alessio", "Cars", 9.0, 1)
+  end
+
+  def test_rental_new_release_statement
+    @customer.add_rental Rental.new(MOVIE_NEW_RELEASE, 2)
+    assert_equal @customer.statement, rented_statement("Alessio", "Civil War", 6, 2)
+  end
+
+  def test_rental_new_release_five_days
+    @customer.add_rental Rental.new(MOVIE_NEW_RELEASE, 5)
+    assert_equal @customer.statement, rented_statement("Alessio", "Civil War", 15, 2)
   end
 
 
