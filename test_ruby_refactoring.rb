@@ -54,18 +54,35 @@ class RefactoringTest < Test::Unit::TestCase
   def test_rental_two_movies
     @customer.add_rental Rental.new(MOVIE_NEW_RELEASE, 2)
     @customer.add_rental Rental.new(MOVIE_REGULAR, 3)
-    assert_equal @customer.statement, "Rental Record for Alessio\n\tCivil War\t6\n\tAvengers\t3.5\nAmount owed is 9.5\nYou earned 3 frequent renter points"
+
+    rentals = [{movie: "Civil War", amount: 6},
+               {movie: "Avengers", amount: 3.5}]
+    assert_equal @customer.statement, rented_statement("Alessio", rentals, 9.5, 3)
   end
 
   def test_rental_three_new_releases
     @customer.add_rental Rental.new(MOVIE_NEW_RELEASE, 1)
     @customer.add_rental Rental.new(MOVIE_NEW_RELEASE, 3)
     @customer.add_rental Rental.new(MOVIE_NEW_RELEASE, 8)
-    assert_equal @customer.statement, "Rental Record for Alessio\n\tCivil War\t3\n\tCivil War\t9\n\tCivil War\t24\nAmount owed is 36\nYou earned 5 frequent renter points"
+
+    rentals = [{movie: "Civil War", amount: 3},
+               {movie: "Civil War", amount: 9},
+               {movie: "Civil War", amount: 24}]
+    assert_equal @customer.statement,  rented_statement("Alessio", rentals, 36, 5)
   end
 
 
-  def rented_statement(customer, movie, amount, frequent_renter_points)
-    "Rental Record for #{customer}\n\t#{movie}\t#{amount}\nAmount owed is #{amount}\nYou earned #{frequent_renter_points} frequent renter points"
+  def rented_statement(customer, rentals, amount, frequent_renter_points)
+    statement = "Rental Record for #{customer}\n"
+
+    if rentals.is_a? String
+      statement += "\t#{rentals}\t#{amount}\n"
+    else
+      rentals.each do |rental|
+        statement += "\t#{rental[:movie]}\t#{rental[:amount]}\n"
+      end
+    end
+
+    statement += "Amount owed is #{amount}\nYou earned #{frequent_renter_points} frequent renter points"
   end
 end
