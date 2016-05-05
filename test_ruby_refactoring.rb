@@ -4,23 +4,27 @@ require "test/unit"
 
 class RefactoringTest < Test::Unit::TestCase
 
+  MOVIE_REGULAR = Movie.new("Avengers", Movie::REGULAR)
+
+  def setup
+    @customer = Customer.new "Alessio"
+  end
+
   def test_basic_customer_creation
-    customer = Customer.new "Alessio"
-    assert_equal "Alessio", customer.name
+    assert_equal "Alessio", @customer.name
   end
 
   def test_check_rental_regular_statement
-    customer = Customer.new "Alessio"
-    movie_regular = Movie.new("Avengers", Movie::REGULAR)
-    customer.add_rental Rental.new movie_regular, 2
-    assert_equal "Rental Record for Alessio\n\tAvengers\t2\nAmount owed is 2\nYou earned 1 frequent renter points", customer.statement
+    @customer.add_rental Rental.new(MOVIE_REGULAR, 2)
+    assert_equal @customer.statement, rented_statement("Alessio", "Avengers", 2, 1)
   end
 
   def test_rental_regular_more_than_two_days
-    customer = Customer.new "Alessio"
-    movie_regular = Movie.new("Avengers", Movie::REGULAR)
-    customer.add_rental Rental.new movie_regular, 3
-    assert_equal "Rental Record for Alessio\n\tAvengers\t3.5\nAmount owed is 3.5\nYou earned 1 frequent renter points", customer.statement
+    @customer.add_rental Rental.new(MOVIE_REGULAR, 3)
+    assert_equal @customer.statement, rented_statement("Alessio", "Avengers", 3.5, 1)
   end
 
+  def rented_statement(customer, movie, amount, frequent_renter_points)
+    "Rental Record for #{customer}\n\t#{movie}\t#{amount}\nAmount owed is #{amount}\nYou earned #{frequent_renter_points} frequent renter points"
+  end
 end
