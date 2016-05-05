@@ -6,8 +6,8 @@ class Movie
   attr_reader :title
   attr_reader :price_code
 
-  def initialize(title, price_code)
-    @title, @price_code = title, price_code
+  def initialize(*args)
+    @title, @price_code = args[0], args[1]
   end
 
   def amount_for(days)
@@ -33,6 +33,18 @@ class Movie
 
   def to_s
     "\t" + @title
+  end
+end
+
+class RegularMovie < Movie
+  def amount_for(days)
+    this_amount = 2
+    this_amount += (days - 2) * 1.5 if days > 2
+    this_amount
+  end
+
+  def renter_points(days)
+    1
   end
 end
 
@@ -81,6 +93,5 @@ class Customer
 
     result += "Amount owed is #{total_amount}\n"
     result += "You earned #{frequent_renter_points} frequent renter points"
-    result
   end
 end
