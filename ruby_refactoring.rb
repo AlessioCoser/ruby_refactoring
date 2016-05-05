@@ -9,6 +9,21 @@ class Movie
   def initialize(title, price_code)
     @title, @price_code = title, price_code
   end
+
+  def amount_for(days)
+    this_amount = 0
+    case @price_code
+      when Movie::REGULAR
+        this_amount += 2
+        this_amount += (days - 2) * 1.5 if days > 2
+      when Movie::NEW_RELEASE
+        this_amount += days * 3
+      when Movie::CHILDRENS
+        this_amount += 1.5
+        this_amount += (days - 3) * 1.5 if days > 3
+    end
+    this_amount
+  end
 end
 
 class Rental
@@ -16,6 +31,10 @@ class Rental
 
   def initialize(movie, days_rented)
     @movie, @days_rented = movie, days_rented
+  end
+
+  def amount
+    @movie.amount_for @days_rented
   end
 end
 
@@ -32,26 +51,11 @@ class Customer
     @rentals << arg
   end
 
-  def rental_amount(rental)
-    this_amount = 0
-    case rental.movie.price_code
-      when Movie::REGULAR
-        this_amount += 2
-        this_amount += (rental.days_rented - 2) * 1.5 if rental.days_rented > 2
-      when Movie::NEW_RELEASE
-        this_amount += rental.days_rented * 3
-      when Movie::CHILDRENS
-        this_amount += 1.5
-        this_amount += (rental.days_rented - 3) * 1.5 if rental.days_rented > 3
-    end
-    this_amount
-  end
-
   def statement
     total_amount, frequent_renter_points = 0, 0
     result = "Rental Record for #{@name}\n"
     @rentals.each do |rental|
-      this_amount = rental_amount rental
+      this_amount = rental.amount
 
       # add frequent renter points
       frequent_renter_points += 1
