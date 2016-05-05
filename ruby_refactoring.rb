@@ -1,46 +1,22 @@
 class Movie
-  REGULAR = 0
-  NEW_RELEASE = 1
-  CHILDRENS = 2
-
   attr_reader :title
-  attr_reader :price_code
 
-  def initialize(*args)
-    @title, @price_code = args[0], args[1]
+  def initialize(title)
+    @title = title
   end
 
-  def amount_for(days)
-    this_amount = 0
-    case @price_code
-      when Movie::REGULAR
-        this_amount += 2
-        this_amount += (days - 2) * 1.5 if days > 2
-      when Movie::NEW_RELEASE
-        this_amount += days * 3
-      when Movie::CHILDRENS
-        this_amount += 1.5
-        this_amount += (days - 3) * 1.5 if days > 3
-    end
-    this_amount
-  end
-
-  def renter_points(days)
-    renter_point = 1
-    renter_point += 1 if days > 1 && @price_code == Movie::NEW_RELEASE
-    renter_point
-  end
-
-  def to_s
-    "\t" + @title
-  end
-end
-
-class RegularMovie < Movie
   def amount_for(days)
     this_amount = 2
     this_amount += (days - 2) * 1.5 if days > 2
     this_amount
+  end
+
+  def renter_points(days)
+    1
+  end
+
+  def to_s
+    "\t" + @title
   end
 end
 

@@ -4,7 +4,7 @@ require "test/unit"
 
 class RefactoringTest < Test::Unit::TestCase
 
-  MOVIE_REGULAR = RegularMovie.new("Avengers")
+  MOVIE_REGULAR = Movie.new("Avengers")
   MOVIE_CHILDRENS = ChildrenMovie.new("Cars")
   MOVIE_NEW_RELEASE = NewReleaseMovie.new("Civil War")
 
