@@ -16,7 +16,7 @@ class RefactoringTest < Test::Unit::TestCase
     assert_equal "Alessio", @customer.name
   end
 
-  def test_check_rental_regular_statement
+  def test_rental_regular_statement
     @customer.add_rental Rental.new(MOVIE_REGULAR, 2)
     assert_equal @customer.statement, rented_statement("Alessio", "Avengers", 2, 1)
   end
@@ -26,12 +26,12 @@ class RefactoringTest < Test::Unit::TestCase
     assert_equal @customer.statement, rented_statement("Alessio", "Avengers", 3.5, 1)
   end
 
-  def test_rental_children_statement
+  def test_children
     @customer.add_rental Rental.new(MOVIE_CHILDRENS, 2)
     assert_equal @customer.statement, rented_statement("Alessio", "Cars", 1.5, 1)
   end
 
-  def test_rental_children_more_than_three_days
+  def test_children_more_than_three_days
     @customer.add_rental Rental.new(MOVIE_CHILDRENS, 4)
     assert_equal @customer.statement, rented_statement("Alessio", "Cars", 3.0, 1)
   end
@@ -49,6 +49,12 @@ class RefactoringTest < Test::Unit::TestCase
   def test_rental_new_release_five_days
     @customer.add_rental Rental.new(MOVIE_NEW_RELEASE, 5)
     assert_equal @customer.statement, rented_statement("Alessio", "Civil War", 15, 2)
+  end
+
+  def test_rental_two_movies
+    @customer.add_rental Rental.new(MOVIE_NEW_RELEASE, 2)
+    @customer.add_rental Rental.new(MOVIE_REGULAR, 3)
+    assert_equal @customer.statement, "Rental Record for Alessio\n\tCivil War\t6\n\tAvengers\t3.5\nAmount owed is 9.5\nYou earned 3 frequent renter points"
   end
 
 
