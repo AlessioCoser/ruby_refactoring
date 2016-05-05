@@ -42,9 +42,25 @@ class RegularMovie < Movie
     this_amount += (days - 2) * 1.5 if days > 2
     this_amount
   end
+end
+
+class ChildrenMovie < Movie
+  def amount_for(days)
+    this_amount = 1.5
+    this_amount += (days - 3) * 1.5 if days > 3
+    this_amount
+  end
+end
+
+class NewReleaseMovie < Movie
+  def amount_for(days)
+    days * 3
+  end
 
   def renter_points(days)
-    1
+    renter_point = 1
+    renter_point += 1 if days > 1
+    renter_point
   end
 end
 

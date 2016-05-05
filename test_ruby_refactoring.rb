@@ -5,8 +5,8 @@ require "test/unit"
 class RefactoringTest < Test::Unit::TestCase
 
   MOVIE_REGULAR = RegularMovie.new("Avengers")
-  MOVIE_CHILDRENS = Movie.new("Cars", Movie::CHILDRENS)
-  MOVIE_NEW_RELEASE = Movie.new("Civil War", Movie::NEW_RELEASE)
+  MOVIE_CHILDRENS = ChildrenMovie.new("Cars")
+  MOVIE_NEW_RELEASE = NewReleaseMovie.new("Civil War")
 
   def setup
     @customer = Customer.new "Alessio"
